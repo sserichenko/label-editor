@@ -1,0 +1,44 @@
+{
+    "Label": 
+    {
+        "Width": 100,
+        "Height": 100,
+        "LabelType": "ITEM",
+        "DPI" : 8
+    },
+    "Fields": [
+        {
+            "FieldType": "PRICE",
+            "YPosition": 0,
+            "XPosition": 0,
+            "Angle": 180,
+            "PrintStatus": "ALWAYS",
+            "CharacterSize": "S1",
+            "Width": 100,
+            "Height": 100,
+            "Thinkness": null
+        },
+        {
+            "FieldType": "FRAME1",
+            "YPosition": 0,
+            "XPosition": 0,
+            "Angle": null,
+            "PrintStatus": "ALWAYS",
+            "CharacterSize": null,
+            "Width": 100,
+            "Height": 100,
+            "Thinkness": 3
+        },
+        {
+            "FieldType": "TEXT4",
+            "YPosition": 50,
+            "XPosition": 300,
+            "Angle": 0,
+            "PrintStatus": "WEIGHT",
+            "CharacterSize": null,
+            "Width": 100,
+            "Height": 100,
+            "Thinkness": null
+        }
+    ]
+}
