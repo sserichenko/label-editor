@@ -100,10 +100,15 @@ body,
   padding: 50px;
 }
 
+.moveable-line{
+  background: transparent!important;
+}
+
 #parent {
   position: static!important;
   width: 600px;
   height: 600px;
+  /* transform: rotate(270deg); */
   /* background-color: rgb(177, 199, 180);
   background: linear-gradient(90deg, #ffffff 9px, transparent 1%) center, linear-gradient(#ffffff 9px, transparent 1%) center, #403e44; */
   background-size: 10px 10px;
@@ -247,5 +252,93 @@ body,
   font-style: italic;
 }
 
+/*  */
 
+.form-size__wrapper{
+  max-width: 300px;
+  padding: 6px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 2px solid black;
+  margin-bottom: 10px;
+}
 
+.form-size__wrapper p{
+  margin: 0;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+#size-form .form-field {
+  display: flex;
+  margin: 0 0 10px 0;
+}
+#size-form label, #size-form input {
+  width: 70%;
+  padding: 4px;
+  box-sizing: border-box;
+  justify-content: space-between;
+  font-size: 12px;
+}
+#size-form label {
+  text-align: right;
+  width: 30%;
+
+}
+#size-form input {
+  border: 1px solid black;
+  border-radius: 4px;
+  border-radius: 2px;
+}
+#size-form button{
+  background-color: #333333;
+  border: none;
+  color: white;
+  padding: 8px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 4px;
+  margin: 6px 0px;
+}
+
+/*  */
+
+.form-select {
+  margin-bottom: 12px;
+  max-width: 250px;
+}
+
+.form-select label{
+  font-size: 16px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.form-select .custom-select{
+  font-size: 12px;
+  text-align: left;
+}
+
+.custom-select .css-1s2u09g-control{
+  border: 1px solid black;
+}
+
+/*  */
+
+.info-block{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 8px 0px;
+  background-color: lightgrey;
+}
+.info-block span{
+  color: black;
+  padding: 2px 4px;
+  font-size: 14px;
+  text-align: left;
+}
