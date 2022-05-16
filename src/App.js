@@ -1,7 +1,7 @@
 import React from "react";
 
 import MoveableComponent from "./components/MoveableComponent";
-import MoveableFuncComponent from "./components/MoveableFuncComponent";
+// import MoveableFuncComponent from "./components/MoveableFuncComponent";
 
 function App() {
   // const [boxes, setBoxes] = useState([

@@ -83,6 +83,7 @@ html,
 body,
 #root {
   font-family: "Arial", sans-serif;
+  font-size: 14px;
   /* position: static; */
   /* position: relative!important; */
   margin: 0;
@@ -95,9 +96,13 @@ body,
   text-align: center;
 }
 
+.css-tlfecz-indicatorContainer{
+  color: var(--main-dots-color)!important;
+}
+
 .moveableComponent{
   position: relative;
-  padding: 50px;
+  padding: 50px 50px 0px 50px;
 }
 
 .moveable-line{
@@ -134,7 +139,7 @@ body,
   height: 1px;
   border-bottom: 4px dashed red;
   left: 50px;
-  top: 146px;
+  top: 80%;
 }
 
 .target {
@@ -173,13 +178,22 @@ body,
 }
 
 .main-title{
-  font-size: 30px;
-  line-height: 30px;
+  font-size: 10px;
+  line-height: 10px;
   width: 100%;
-  font-weight: bold;
+  height: 100%;
+  font-weight: 600;
   text-align: center;
   margin: 0;
   padding: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* margin: auto 0; */
+}
+
+.main-title span{
   position: absolute;
   left: 50%;
   top: 50%;
@@ -216,9 +230,10 @@ body,
   position: absolute;
   padding: 12px;
   background: white;
-  border-radius: 8px;
   top: 50px;
   right: 50px;
+  max-height: 480px;
+  overflow-y: scroll;
 }
 .tollbar__wrapper{
   display: flex;
@@ -234,15 +249,22 @@ body,
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
+  font-size: 10px;
   border-radius: 4px;
   margin: 6px 0px;
+  cursor: pointer;
+  transition: all 200ms ease;
 }
+
+.toolbar__button:hover{
+  background-color: #355f2f
+}
+
 .toolbar__button.danger{
   color: red;
 }
 .toolbar__button.submit{
-  color: green;
+  color: yellow;
 }
 .toolbar__label{
   font-weight: 500;
@@ -298,9 +320,15 @@ body,
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
+  font-size: 10px;
   border-radius: 4px;
   margin: 6px 0px;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+#size-form button:hover{
+  background-color: #355f2f;
 }
 
 /*  */
@@ -311,7 +339,7 @@ body,
 }
 
 .form-select label{
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   display: block;
   margin-bottom: 6px;
@@ -342,3 +370,17 @@ body,
   font-size: 14px;
   text-align: left;
 }
+
+/* Frame field */
+
+.frame-field{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid black; */
+}
+/* .frame-field p{
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+} */

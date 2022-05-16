@@ -1,85 +1,65 @@
-import React, { Component, Fragment } from "react";
-import Moveable from "react-moveable";
-import { v4 as uuidv4 } from "uuid";
-import RulerHorizontal from "./RulerHorizontal";
-import ToolBar from "./ToolBar";
+import React, { Component, Fragment } from 'react';
+import Moveable from 'react-moveable';
+import { v4 as uuidv4 } from 'uuid';
+import RulerHorizontal from './RulerHorizontal';
+import ToolBar from './ToolBar';
 
 export default class MoveableComponent extends Component {
   state = {
     boxes: [
       {
-        _id: "5F123",
-        name: "Box 1",
+        _id: '5F123',
+        name: 'Starter kit',
         target: null,
-        status: "Всегда печатать",
+        status: 'Всегда печатать',
         width: 200,
         height: 80,
         top: 110,
         left: 0,
         rotate: 0,
         picture: null,
-        title: null, 
+        title: null,
         price: null,
         digit: null,
         isResizable: true,
         isRotateble: true,
-        isDragable: true
+        isDragable: true,
       },
-      // {
-      //   _id: "5F456",
-      //   name: "Box 2",
-      //   target: null,
-      //   width: 200,
-      //   height: 80,
-      //   top: 360,
-      //   left: 100,
-      //   rotate: 0,
-      // },
-      // {
-      //   _id: "5F789",
-      //   name: "Box 3",
-      //   target: null,
-      //   width: 200,
-      //   height: 80,
-      //   top: 300,
-      //   left: 75,
-      //   rotate: 0,
-      // },
     ],
     isVerticalRulerShow: true,
     isHorizontalRulerShow: true,
     isGridShow: true,
+    isDigitFields: false,
+    isFrameFields: false,
     layerSize: {
       width: 600,
-      height: 600
-    }
+      height: 600,
+    },
   };
 
   stylesHorizontal = {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
-    left: "50px",
+    left: '50px',
     // transform: `translate(${-50}%, ${0}px)`,
-    width: "600px",
-    height: "50px",
-    margin: "0 auto",
-    textAlign: "center",
+    width: '600px',
+    height: '50px',
+    margin: '0 auto',
+    textAlign: 'center',
   };
 
   stylesVertical = {
-    position: "absolute",
-    top: "50px",
+    position: 'absolute',
+    top: '50px',
     left: 0,
-    width: "50px",
-    height: "600px",
-    margin: "0 auto",
-    textAlign: "center",
+    width: '50px',
+    height: '600px',
+    margin: '0 auto',
+    textAlign: 'center',
   };
 
   getBox(target) {
-    return this.state.boxes.find(
-      (box) => box._id === target.id.split("-").pop()
-    );
+    return this.state.boxes.find((box) => box._id === target.id.split('-').pop());
   }
 
   onDragStart = ({ target, set }) => {
@@ -92,21 +72,33 @@ export default class MoveableComponent extends Component {
     this.setState((prevState) => ({
       ...prevState,
       boxes: prevState.boxes.map((b) =>
-        b._id === box._id
-          ? { ...b, left: beforeTranslate[0], top: beforeTranslate[1] }
-          : b
+        b._id === box._id ? { ...b, left: beforeTranslate[0], top: beforeTranslate[1] } : b,
       ),
     }));
     target.style.transform = `translate(${beforeTranslate[0]}px, ${beforeTranslate[1]}px) rotate(${box.rotate}deg)`;
   };
+
+  //! Попробовать решить вопрос с возвращением блока из-за границ области
+
+  // onDragEnd = ({target}) => {
+  //   const box = this.getBox(target)
+  //   if(box.left > (this.state.layerSize.width - box.width)){
+  //     console.log("ВЫЛЕЗЛО ЗА РАМКИ")
+  //     target.style.transform = `translate(${this.state.layerSize.width - box.width}px, ${box.top}px) rotate(${box.rotate}deg)`;
+  //   }
+  //   box.left = this.state.layerSize.width;
+  //   console.log("BOX LEFT", box.left)
+  //   // console.log("DRAG END BOX", box)
+  // }
+
   onResizeStart = ({ target, setOrigin, dragStart }) => {
-    console.log('ON RESIZE START')
+    console.log('ON RESIZE START');
     const box = this.getBox(target);
-    setOrigin(["%", "%"]);
+    setOrigin(['%', '%']);
     dragStart && dragStart.set([box.left, box.top]);
   };
   onResize = ({ target, width, height, drag }) => {
-    console.log('ON RESIZE')
+    console.log('ON RESIZE');
     const box = this.getBox(target);
     const beforeTranslate = drag.beforeTranslate;
     this.setState((prevState) => ({
@@ -120,10 +112,10 @@ export default class MoveableComponent extends Component {
               left: beforeTranslate[0],
               top: beforeTranslate[1],
             }
-          : b
+          : b,
       ),
     }));
-    console.log("ROTATE CURRENT FROM STATE", box.rotate)
+    // console.log("ROTATE CURRENT FROM STATE", box.rotate)
     target.style.width = `${width}px`;
     target.style.height = `${height}px`;
     target.style.transform = `translate(${beforeTranslate[0]}px, ${beforeTranslate[1]}px) rotate(${box.rotate}deg)`;
@@ -137,25 +129,25 @@ export default class MoveableComponent extends Component {
     const box = this.getBox(target);
     this.setState((prevState) => ({
       ...prevState,
-      boxes: prevState.boxes.map((b) =>
-        b._id === box._id ? { ...b, rotate: beforeRotate } : b
-      ),
+      boxes: prevState.boxes.map((b) => (b._id === box._id ? { ...b, rotate: beforeRotate } : b)),
     }));
     target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(${beforeRotate}deg)`;
   };
-  // 
-  onRotateEnd = ({target}) => {
+  //
+  onRotateEnd = ({ target }) => {
     // console.log("END OF ROTATION")
 
     const box = this.getBox(target);
     // let degreeValue = parseInt(target.style.transform.split(" ")[2].match(/\d+/));
-    
-    const degreeValue = parseFloat(target.style.transform.split(" ")[2].match(/-?\d*\.\d*/)[0]);
-    
+
+    const degreeValue = parseFloat(target.style.transform.split(' ')[2].match(/-?\d*\.\d*/)[0]);
+    if(!degreeValue) {
+      return
+    }
 
     // let degreeWithMinus = parseFloat(target.style.transform.split(" ")[2].match(/-?\d*\.\d*/)[0]);
 
-    console.log('degreeVALUE >>>', degreeValue)
+    // console.log('degreeVALUE >>>', degreeValue);
     // console.log('degreeWithMinus >>>', degreeWithMinus)
 
     // if(degreeValue < 0 && degreeValue > -45){
@@ -163,57 +155,67 @@ export default class MoveableComponent extends Component {
     //   box.rotate = 0;
     // }
 
-      
-
-      if((degreeValue >= 0 && degreeValue < 45) || (degreeValue <= 0 && degreeValue > -45)){
-        target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(0deg)`;
-        box.rotate = 0;
-      }
-      if(degreeValue > 0 && degreeValue > 45 && degreeValue < 90){
-        target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(90deg)`;
-        box.rotate = 90;
-      }
-      if(degreeValue > 0 && degreeValue > 90 && degreeValue < 135){
-        target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(90deg)`;
-        box.rotate = 90;
-      }
-      if((degreeValue > 0 && degreeValue > 135 && degreeValue < 180) || (degreeValue < 0 && degreeValue < -135 && degreeValue > -180)){
-        target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(180deg)`;
-        box.rotate = 180;
-      }
-      // ---
-      if((degreeValue > 180 && degreeValue < 225) || (degreeValue < 0 && degreeValue < -180 && degreeValue > -225)){
-        target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(180deg)`;
-        box.rotate = 180;
-      }
-      if((degreeValue > 225 && degreeValue < 270) || (degreeValue < 0 && degreeValue < -45 && degreeValue > -90)){
-        target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(270deg)`;
-        box.rotate = 270;
-      }
-      if((degreeValue > 270 && degreeValue < 315) || (degreeValue < 0 && degreeValue < -90 && degreeValue > -135)){
-        target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(270deg)`;
-        box.rotate = 270;
-      }
-      if(degreeValue > 315){
-        target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(0deg)`;
-        box.rotate = 0;
-      }
+    if ((degreeValue >= 0 && degreeValue < 45) || (degreeValue <= 0 && degreeValue > -45)) {
+      target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(0deg)`;
+      box.rotate = 0;
+    }
+    if (degreeValue > 0 && degreeValue > 45 && degreeValue < 90) {
+      target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(90deg)`;
+      box.rotate = 90;
+    }
+    if (degreeValue > 0 && degreeValue > 90 && degreeValue < 135) {
+      target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(90deg)`;
+      box.rotate = 90;
+    }
+    if (
+      (degreeValue > 0 && degreeValue > 135 && degreeValue < 180) ||
+      (degreeValue < 0 && degreeValue < -135 && degreeValue > -180)
+    ) {
+      target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(180deg)`;
+      box.rotate = 180;
+    }
+    // ---
+    if (
+      (degreeValue > 180 && degreeValue < 225) ||
+      (degreeValue < 0 && degreeValue < -180 && degreeValue > -225)
+    ) {
+      target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(180deg)`;
+      box.rotate = 180;
+    }
+    if (
+      (degreeValue > 225 && degreeValue < 270) ||
+      (degreeValue < 0 && degreeValue < -45 && degreeValue > -90)
+    ) {
+      target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(270deg)`;
+      box.rotate = 270;
+    }
+    if (
+      (degreeValue > 270 && degreeValue < 315) ||
+      (degreeValue < 0 && degreeValue < -90 && degreeValue > -135)
+    ) {
+      target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(270deg)`;
+      box.rotate = 270;
+    }
+    if (degreeValue > 315) {
+      target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(0deg)`;
+      box.rotate = 0;
+    }
   };
 
-  onEnd = ({target, width, height, drag}) => {
-    console.log("target on end >>> ", target)
-  }
+  onEnd = ({ target, width, height, drag }) => {
+    console.log('target on end >>> ', target);
+  };
 
-  // 
+  //
 
   componentDidMount() {
-    // console.log("MOUNT");
+    // console.log("COMPONENT DID MOUNT");
     this.renderElementsWithMoveable();
-    window.addEventListener("resize", this.onWindowReisze);
+    window.addEventListener('resize', this.onWindowReisze);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this.onWindowReisze);
+    window.removeEventListener('resize', this.onWindowReisze);
   }
   onWindowResize = () => {
     this.moveable.updateRect();
@@ -235,56 +237,84 @@ export default class MoveableComponent extends Component {
       target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(${box.rotate}deg)`;
       this.setState((prevState) => ({
         ...prevState,
-        boxes: prevState.boxes.map((b) =>
-          b._id === box._id ? { ...b, target } : b
-        ),
+        boxes: prevState.boxes.map((b) => (b._id === box._id ? { ...b, target } : b)),
       }));
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log('COMPONENT DID UPDATE')
+    console.log('COMPONENT DID UPDATE');
     if (prevState.boxes.length !== this.state.boxes.length) {
+      this.onCheckDigitFields();
+      this.onCheckFrameFields();
       this.renderElementsWithMoveable();
     }
   }
 
-  onAddItem = (name, image, title, price, digit) => {
+  onCheckDigitFields() {
+    const isDigitField = this.state.boxes.find((el, index) => el.type === 'DigitField');
+    if (isDigitField) {
+      this.setState((prevState) => ({
+        ...prevState,
+        isDigitFields: true,
+      }));
+    } else {
+      this.setState((prevState) => ({
+        ...prevState,
+        isDigitFields: false,
+      }));
+    }
+  }
+
+  onCheckFrameFields() {
+    const isFrameField = this.state.boxes.find((el, index) => el.type === 'frameField');
+    if (isFrameField) {
+      this.setState((prevState) => ({
+        ...prevState,
+        isFrameFields: true,
+      }));
+    } else {
+      this.setState((prevState) => ({
+        ...prevState,
+        isFrameFields: false,
+      }));
+    }
+  }
+
+  onAddItem = (name, image, title, price, picture) => {
     this.setState((prevState) => ({
       ...prevState,
       boxes: [
         ...prevState.boxes,
         {
-          _id: uuidv4().split("-")[0],
+          _id: uuidv4().split('-')[0],
           name: name,
           target: null,
-          status: "Всегда печатать",
+          status: 'Всегда печатать',
           width: 140,
           height: 80,
           top: 150,
           left: 60,
           rotate: 0,
-          picture: image,
-          title: title, 
+          picture: picture,
+          title: title,
           price: price,
-          digit: digit,
+          // digit: digit,
           isResizable: false,
           isRotateble: false,
-          isDragable: false
+          isDragable: false,
         },
       ],
     }));
-  }
+  };
 
   onAddCustomItem = (item) => {
     this.setState((prevState) => ({
       ...prevState,
-      boxes:[
-        ...prevState.boxes, item
-      ]
-    }))
+      boxes: [...prevState.boxes, item],
+    }));
     // console.log('ITEM >>>', item)
-  }
+  };
 
   onToggleHorizontalRuler() {
     this.setState((prevState) => ({
@@ -307,92 +337,109 @@ export default class MoveableComponent extends Component {
     }));
   }
 
-  onToggleResizable(id){
-    const updatedBoxes  = this.state.boxes.map((box) => {
-      if(box._id === id && !box.font){
+  onToggleResizable(id) {
+    const updatedBoxes = this.state.boxes.map((box) => {
+      if (box._id === id && !box.font) {
         // console.log("BOX >>> ", box)
-          box.isResizable = true;
-          box.isRotateble = true;
-          box.isDragable = true;
+        box.isResizable = true;
+        box.isRotateble = true;
+        box.isDragable = true;
       }
-      if(box._id === id && box.font){
-          box.isResizable = false;
-          box.isRotateble = true;
-          box.isDragable = true;
-      }
-      else if(box._id !== id){
+      if (box._id === id && box.font) {
+        box.isResizable = false;
+        box.isRotateble = true;
+        box.isDragable = true;
+      } else if (box._id !== id) {
         // console.log("BOX >>> ", box)
         box.isResizable = false;
         box.isRotateble = false;
         box.isDragable = false;
       }
-      return box
-    })
+      return box;
+    });
     this.setState((prevState) => ({
       ...prevState,
-      boxes: [...updatedBoxes]
-    }))
+      boxes: [...updatedBoxes],
+    }));
   }
 
-  onUpdateLabelSizeHandler(data){
+  onUpdateLabelSizeHandler(data) {
     // console.log("data", data);
     // console.log('STYLES', this.widthStyles)
     this.setState((prevState) => ({
       ...prevState,
-      layerSize:{
+      layerSize: {
         width: data.width,
-        height: data.height
-      }
-    }))
+        height: data.height,
+      },
+    }));
   }
 
-  onUpdateFontSizeHandler(data){
+  onUpdateFontSizeHandler(data) {
     const updatedBoxes = this.state.boxes.map((box) => {
-      if(box.font && box.isDragable){
+      if (box.font && box.isDragable) {
         // console.log("data >>> ", data)
         box.width = data.value.width;
         box.height = data.value.height;
-        box.font = data.label
-        box.isResizable = false
-        box.isRotateble = true
-        box.isDragable = true
+        box.font = data.label;
+        box.isResizable = false;
+        box.isRotateble = true;
+        box.isDragable = true;
       }
       return box;
-    })
+    });
     this.setState((prevState) => ({
       ...prevState,
-      boxes: [...updatedBoxes]
-    }))
+      boxes: [...updatedBoxes],
+    }));
     this.renderElementsWithMoveable();
     // this.onEnd()
     // this.onResize()
   }
 
-  onUpdateStatusHandler(data){
+  onUpdateStatusHandler(data) {
     const updatedBoxes = this.state.boxes.map((box) => {
-      if(box.status && box.isDragable){
-        box.status = data.value
+      if (box.status && box.isDragable) {
+        box.status = data.value;
       }
-      return box
-    })
+      return box;
+    });
 
     this.setState((prevState) => ({
       ...prevState,
-      boxes: [...updatedBoxes]
-    }))
+      boxes: [...updatedBoxes],
+    }));
+  }
 
+  onUpdateBorderSizeHandler(data) {
+    const updatedBoxes = this.state.boxes.map((box) => {
+      if (box.isDragable && box.type === 'frameField') {
+        box.borderWidth = data.value;
+      }
+      return box;
+    });
+    this.setState((prevState) => ({
+      ...prevState,
+      boxes: [...updatedBoxes],
+    }));
   }
 
   render() {
-    const { boxes, isGridShow, layerSize } = this.state;
+    const { boxes, isGridShow, layerSize, isDigitFields, isFrameFields } = this.state;
 
     return (
       <div className="moveableComponent">
         {this.state.isHorizontalRulerShow && (
-          <RulerHorizontal type="horizontal" style={{...this.stylesHorizontal, width: layerSize.width + "px"}} />
+          <RulerHorizontal
+            type="horizontal"
+            style={{ ...this.stylesHorizontal, width: layerSize.width + 'px' }}
+          />
         )}
         {this.state.isVerticalRulerShow && (
-          <RulerHorizontal type="vertical" style={{...this.stylesVertical, height: layerSize.height + "px"}} />
+          <RulerHorizontal
+            type="vertical"
+            style={{ ...this.stylesVertical, height: layerSize.height + 'px' }}
+          />
         )}
         <ToolBar
           onAddCustomItem={this.onAddCustomItem}
@@ -402,39 +449,49 @@ export default class MoveableComponent extends Component {
           onToggleGrid={this.onToggleGrid.bind(this)}
           onUpdateLabelSizeHandler={this.onUpdateLabelSizeHandler.bind(this)}
           onUpdateFontSizeHandler={this.onUpdateFontSizeHandler.bind(this)}
-          onUpdateStatusHandler = {this.onUpdateStatusHandler.bind(this)}
+          onUpdateStatusHandler={this.onUpdateStatusHandler.bind(this)}
+          onUpdateBorderSizeHandler={this.onUpdateBorderSizeHandler.bind(this)}
+          isDigitFields={isDigitFields}
+          isFrameFields={isFrameFields}
         />
-        <div className={isGridShow ? "parent active" : "parent"} id="parent" style={{width: layerSize.width + "px", height: layerSize.height + "px"}}>
-          <div className="breakLine" style={{width: layerSize.width + "px"}}></div>
+        <div
+          className={isGridShow ? 'parent active' : 'parent'}
+          id="parent"
+          style={{ width: layerSize.width + 'px', height: layerSize.height + 'px' }}>
+          <div className="breakLine" style={{ width: layerSize.width + 'px' }}></div>
           {boxes.map((box, i) => (
             <Fragment key={i}>
               <div
                 id={`box-${box._id}`}
-                className={"target"}
-                onClick={() => this.onToggleResizable(box._id)}
-              >
-                {box.isDragable && (<button
-                  className="remove-btn"
-                  onClick={(e) => this.onRemoveItem(box._id, e)}
-                >
-                  x
-                </button>)}
-                
-                {box.name && <p className="main-title">{box.name}</p>}
+                className={'target'}
+                onClick={() => this.onToggleResizable(box._id)}>
+                {box.isDragable && (
+                  <button className="remove-btn" onClick={(e) => this.onRemoveItem(box._id, e)}>
+                    x
+                  </button>
+                )}
+
+                {box.name && (
+                  <p className="main-title">
+                    <span>{box.name}</span>
+                  </p>
+                )}
                 {box.price && <p className="main-price">{box.price}</p>}
 
-                {box.picture && <img className="barcode-image" src={box.picture} alt={box.title}/>}
-                {box.digit && <img className="barcode-image" src={box.digit} alt={box.title}/>}
-
-                {/* <br /> */}
-                
-                {/* {box.picture
-                  ? (<img className="barcode-image" src={box.picture} alt={box.name}/>)
-                  : (<div>{`w:${Math.round(box.width / 8)}, h:${Math.round(
-                  box.height / 8
-                )}, top:${Math.round(box.top)}, left: ${Math.round(box.left)}`}</div>)
-                } */}
-                
+                {box.picture && <img className="barcode-image" src={box.picture} alt={box.title} />}
+                {box.type === 'DigitField' && (
+                  <img className="barcode-image" src={box.digit} alt={box.title} />
+                )}
+                {box.type === 'frameField' && (
+                  <p className="main-title" style={{ border: `${box.borderWidth}px solid black` }}>
+                    <span>{box.label}</span>
+                  </p>
+                )}
+                {box.type === 'TextField' && (
+                  <p className="main-title">
+                    <span>{box.label}</span>
+                  </p>
+                )}
               </div>
               <Moveable
                 key={i + 100}
@@ -448,7 +505,7 @@ export default class MoveableComponent extends Component {
                 snapCenter={false}
                 // bounds={{ left: 20, top: 20, bottom: 920, right: 820 }}
                 elementGuidelines={[
-                  document.querySelector(".parent"),
+                  document.querySelector('.parent'),
                   ...boxes.map((b) => b.target),
                 ]}
                 verticalGuidelines={[100, 200, 300]}
@@ -463,31 +520,38 @@ export default class MoveableComponent extends Component {
                 onResize={this.onResize.bind(this)}
                 onResizeEnd={this.onEnd}
                 throttleResize={1}
-                renderDirections={["nw", "n", "ne", "w", "e", "sw", "s", "se"]}
+                renderDirections={['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']}
                 rotatable={box.isRotateble}
                 onRotateStart={this.onRotateStart}
                 onRotate={this.onRotate.bind(this)}
                 onRotateEnd={this.onRotateEnd}
                 throttleRotate={0.2}
-                rotationPosition={"top"}
+                rotationPosition={'top'}
 
                 // pinchable={["resizable"]}
                 // onPinch={this.onPinch}
                 // onPinchEnd={this.onEnd}
                 // pinchThreshold={20}
               />
-              
             </Fragment>
-            
           ))}
-          
         </div>
-        <div className="info-block" style={{width: layerSize.width + "px"}} >
-          {boxes && boxes.map(box => (
-            <div key={box._id}>
-              {box.isResizable || box.isDragable ? (<span> | Width: {box.width} | Height: {box.height} | Left: {box.left} | Top: {box.top} | </span>) : ""}
-            </div>
-          ))}
+        <div  style={{ width: layerSize.width + 'px' }}>
+          {boxes &&
+            boxes.map((box) => (
+              <div key={box._id}>
+                {box.isResizable || box.isDragable ? (
+                  <span className="info-block">
+                    {' '}
+                    | Width: {Math.ceil(box.width / 8)} | Height: {Math.ceil(box.height / 8)} |
+                    Left: {Math.ceil(box.left / 8)} | Top: {Math.ceil(box.top / 8)} |{' '}
+                    {box.font ? `Font: ${box.font}` : ''} {box.borderWidth ? `Border : ${box.borderWidth}` : ""}
+                  </span>
+                ) : (
+                  ''
+                )}
+              </div>
+            ))}
         </div>
       </div>
     );
