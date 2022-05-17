@@ -32,6 +32,8 @@ export default class MoveableComponent extends Component {
     isDigitFields: false,
     isFrameFields: false,
     layerSize: {
+      labelType: "ITEM",
+      DPI : 8,
       width: 600,
       height: 600,
     },
@@ -369,6 +371,7 @@ export default class MoveableComponent extends Component {
     this.setState((prevState) => ({
       ...prevState,
       layerSize: {
+        ...prevState.layerSize,
         width: data.width,
         height: data.height,
       },
@@ -424,6 +427,14 @@ export default class MoveableComponent extends Component {
     }));
   }
 
+  onHandleSave(){
+    let result = {}
+    const boxes = [...this.state.boxes]
+    const layer = {...this.state.layerSize}
+    result = {boxes: boxes, layer: layer}
+    console.log("RESULT >>> ", result)
+  }
+
   render() {
     const { boxes, isGridShow, layerSize, isDigitFields, isFrameFields } = this.state;
 
@@ -453,6 +464,7 @@ export default class MoveableComponent extends Component {
           onUpdateBorderSizeHandler={this.onUpdateBorderSizeHandler.bind(this)}
           isDigitFields={isDigitFields}
           isFrameFields={isFrameFields}
+          onHandleSave = {this.onHandleSave.bind(this)}
         />
         <div
           className={isGridShow ? 'parent active' : 'parent'}
@@ -492,6 +504,9 @@ export default class MoveableComponent extends Component {
                     <span>{box.label}</span>
                   </p>
                 )}
+                {box.type === "Barcode" && (
+                  <img className="barcode-image" src={box.value} alt={box.label} />
+                )}
               </div>
               <Moveable
                 key={i + 100}
@@ -499,7 +514,7 @@ export default class MoveableComponent extends Component {
                 container={document.body}
                 origin={false}
                 keepRatio={false}
-                edge={true}
+                edge={false}
                 snappable={true}
                 snapThreshold={5}
                 snapCenter={false}
@@ -520,7 +535,8 @@ export default class MoveableComponent extends Component {
                 onResize={this.onResize.bind(this)}
                 onResizeEnd={this.onEnd}
                 throttleResize={1}
-                renderDirections={['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']}
+                renderDirections={box.type === "Barcode" ? ['n', 's'] : ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']}
+                // renderDirections={['n', 's']}
                 rotatable={box.isRotateble}
                 onRotateStart={this.onRotateStart}
                 onRotate={this.onRotate.bind(this)}

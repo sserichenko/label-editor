@@ -901,3 +901,26 @@ export const textFieldOptions = [
         label: 'Текст 7',
       },
 ]
+
+export const barcodeOptions = [
+  {
+        _id: '5F123barcode',
+        type: 'Barcode',
+        status: 'Всегда печатать',
+        target: null,
+        width: 214,
+        height: 150,
+        top: 120,
+        left: 60,
+        rotate: 0,
+        picture: null,
+        title: null,
+        price: null,
+        barcode: "/images/empty-code.svg",
+        isResizable: false,
+        isRotateble: false,
+        isDragable: false,
+        value: "/images/empty-code.svg",
+        label: 'Barcode',
+  }
+]

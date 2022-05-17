@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
-import {digitOptions, statusOptions, fontSizeOptions, frameOptions, borderSizeOptions, textFieldOptions} from "../assets/options";
+import {digitOptions, statusOptions, fontSizeOptions, frameOptions, borderSizeOptions, textFieldOptions, barcodeOptions} from "../assets/options";
 
 const ToolBar = ({
   onAddItem,
@@ -14,6 +14,7 @@ const ToolBar = ({
   onUpdateBorderSizeHandler,
   isDigitFields,
   isFrameFields,
+  onHandleSave
 }) => {
 
   // const newArr = [];
@@ -28,6 +29,7 @@ const ToolBar = ({
   const [textValue, setTextValue] = useState({ label: 'Выбрать тип поля'});
   const [frameValue, setFrameValue] = useState({ label: 'Выбрать тип поля' });
   const [digitValue, setDigitValue] = useState({ label: 'Выбрать тип поля' });
+  const [barcodeValue, setBarcodeValue] = useState({label: "Выберите тип поля"})
   const [fontSizeValue, setFontSizeValue] = useState({
     id: 'fontSizeM3',
     label: 'M3',
@@ -152,7 +154,7 @@ const ToolBar = ({
             onChange={(e) => {
               setFrameValue(e);
               onAddCustomItem(e);
-              console.log('FRAME EVENT >>>', e);
+              // console.log('FRAME EVENT >>>', e);
             }}
             options={frameOptions}
           />
@@ -167,12 +169,27 @@ const ToolBar = ({
               onChange={(e) => {
                 setBorderSize(e);
                 onUpdateBorderSizeHandler(e);
-                console.log('BORDER EVENT >>>', e);
+                // console.log('BORDER EVENT >>>', e);
               }}
               options={borderSizeOptions}
             />
           </div>
         )}
+
+        <div className="form-select">
+          <label htmlFor="barcode-select">Штрихкод</label>
+          <Select
+            id="barcode-select"
+            className="custom-select"
+            defaultValue={barcodeValue}
+            onChange={(e) => {
+              setBarcodeValue(e);
+              onAddCustomItem(e);
+              console.log('Barcode EVENT >>>', e);
+            }}
+            options={barcodeOptions}
+          />
+        </div>
 
         {/* <button
           className="toolbar__button"
@@ -211,7 +228,7 @@ const ToolBar = ({
         <button className="toolbar__button danger" onClick={() => {}}>
           Remove all
         </button>
-        <button className="toolbar__button submit" onClick={() => {}}>
+        <button className="toolbar__button submit" onClick={onHandleSave}>
           Save
         </button>
       </div>
