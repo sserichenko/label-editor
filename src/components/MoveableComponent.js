@@ -100,7 +100,6 @@ export default class MoveableComponent extends Component {
     dragStart && dragStart.set([box.left, box.top]);
   };
   onResize = ({ target, width, height, drag }) => {
-    console.log('ON RESIZE');
     const box = this.getBox(target);
     const beforeTranslate = drag.beforeTranslate;
     this.setState((prevState) => ({
@@ -109,10 +108,10 @@ export default class MoveableComponent extends Component {
         b._id === box._id
           ? {
               ...b,
-              width,
-              height,
-              left: beforeTranslate[0],
-              top: beforeTranslate[1],
+              width: Math.ceil(width),
+              height: Math.ceil(height),
+              left: Math.ceil(beforeTranslate[0]),
+              top: Math.ceil(beforeTranslate[1]),
             }
           : b,
       ),
@@ -120,8 +119,32 @@ export default class MoveableComponent extends Component {
     // console.log("ROTATE CURRENT FROM STATE", box.rotate)
     target.style.width = `${width}px`;
     target.style.height = `${height}px`;
-    target.style.transform = `translate(${beforeTranslate[0]}px, ${beforeTranslate[1]}px) rotate(${box.rotate}deg)`;
+    target.style.transform = `translate(${Math.ceil(beforeTranslate[0])}px, ${Math.ceil(beforeTranslate[1])}px) rotate(${box.rotate}deg)`;
   };
+
+  onResizeEnd = ({target}) => {
+    console.log('RESIZE END')
+    const box = this.getBox(target);
+    let reofdi = box.width % 8
+    console.log("reofdi >>", reofdi)
+    if(reofdi > 0){
+      this.setState((prevState) => ({
+        ...prevState,
+        boxes: prevState.boxes.map((b) =>
+          b._id === box._id
+            ? {
+                ...b,
+                width: box.width - reofdi,
+                height: box.height - reofdi,
+              }
+            : b,
+        ),
+      }))
+      target.style.width = `${box.width - reofdi}px`;
+      target.style.height = `${box.height - reofdi}px`;
+    }
+  }
+
   onRotateStart = ({ target, set }) => {
     const box = this.getBox(target);
     set(box.rotate);
@@ -133,7 +156,7 @@ export default class MoveableComponent extends Component {
       ...prevState,
       boxes: prevState.boxes.map((b) => (b._id === box._id ? { ...b, rotate: beforeRotate } : b)),
     }));
-    target.style.transform = `translate(${box.left}px, ${box.top}px) rotate(${beforeRotate}deg)`;
+    target.style.transform = `translate(${Math.ceil(box.left)}px, ${Math.ceil(box.top)}px) rotate(${beforeRotate}deg)`;
   };
   //
   onRotateEnd = ({ target }) => {
@@ -205,7 +228,10 @@ export default class MoveableComponent extends Component {
   };
 
   onEnd = ({ target, width, height, drag }) => {
-    console.log('target on end >>> ', target);
+    // console.log('target on end >>> ', target);
+
+    // const remOfDiv = 68 % 8
+    // console.log('REM OF DIV >>> ', remOfDiv);
   };
 
   //
@@ -245,7 +271,7 @@ export default class MoveableComponent extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('COMPONENT DID UPDATE');
+    // console.log('COMPONENT DID UPDATE');
     if (prevState.boxes.length !== this.state.boxes.length) {
       this.onCheckDigitFields();
       this.onCheckFrameFields();
@@ -351,7 +377,12 @@ export default class MoveableComponent extends Component {
         box.isResizable = false;
         box.isRotateble = true;
         box.isDragable = true;
-      } else if (box._id !== id) {
+      } 
+      if (box._id === id && box.type === "frameField") {
+        box.isResizable = true;
+        box.isRotateble = false;
+        box.isDragable = true;
+      }else if (box._id !== id) {
         // console.log("BOX >>> ", box)
         box.isResizable = false;
         box.isRotateble = false;
@@ -429,10 +460,20 @@ export default class MoveableComponent extends Component {
 
   onHandleSave(){
     let result = {}
-    const boxes = [...this.state.boxes]
     const layer = {...this.state.layerSize}
-    result = {boxes: boxes, layer: layer}
-    console.log("RESULT >>> ", result)
+    const needBoxes = this.state.boxes.map((box) => ({
+        width: box.width,
+        height: box.height,
+        left: box.left, 
+        top: box.top,
+        fieldType: box.fieldType,
+        rotate: box.rotate ? box.rotate : 0,
+        font: box.font ? box.font : null,
+        status: box.status,
+        borderWidth: box.borderWidth ? box.borderWidth : null
+    }))
+    result = {boxes: needBoxes, layer: layer}
+    console.log("RESULT >>> ", JSON.stringify(result))
   }
 
   render() {
@@ -533,7 +574,7 @@ export default class MoveableComponent extends Component {
                 resizable={box.isResizable}
                 onResizeStart={this.onResizeStart}
                 onResize={this.onResize.bind(this)}
-                onResizeEnd={this.onEnd}
+                onResizeEnd={this.onResizeEnd}
                 throttleResize={1}
                 renderDirections={box.type === "Barcode" ? ['n', 's'] : ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']}
                 // renderDirections={['n', 's']}
@@ -559,7 +600,7 @@ export default class MoveableComponent extends Component {
                 {box.isResizable || box.isDragable ? (
                   <span className="info-block">
                     {' '}
-                    | Width: {Math.ceil(box.width / 8)} | Height: {Math.ceil(box.height / 8)} |
+                    Width: {Math.ceil(box.width / 8)} | Height: {Math.ceil(box.height / 8)} |
                     Left: {Math.ceil(box.left / 8)} | Top: {Math.ceil(box.top / 8)} |{' '}
                     {box.font ? `Font: ${box.font}` : ''} {box.borderWidth ? `Border : ${box.borderWidth}` : ""}
                   </span>

@@ -132,7 +132,7 @@ body,
 #parent.active{
   cursor: pointer;
   opacity: 1;
-  background-image:  linear-gradient(#a3a3b4 2px, transparent 2px), linear-gradient(90deg, #a3a3b4 2px, transparent 2px), linear-gradient(#a3a3b4 1px, transparent 1px), linear-gradient(90deg, #a3a3b4 1px, #ffffff 1px);
+  background-image:  linear-gradient(#d7d7e9 2px, transparent 2px), linear-gradient(90deg, #d7d7e9 2px, transparent 2px), linear-gradient(#d7d7e9 1px, transparent 1px), linear-gradient(90deg, #d7d7e9 1px, #ffffff 1px);
   background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
   background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
 }
@@ -365,7 +365,7 @@ body,
   display: flex;
   justify-content: start;
   align-items: center;
-  padding: 8px 0px;
+  padding: 8px 4px;
   background-color: lightgrey;
 }
 .info-block span{
